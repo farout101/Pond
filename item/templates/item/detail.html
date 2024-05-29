@@ -1,51 +1,54 @@
 {% extends "core/base.html" %}
 
 {% block title %}
-
 {{ item.name }}
-
 {% endblock title %}
 
 {% block content %}
-
 <div class="grid grid-cols-5 gap-6">
     <div class="col-span-2">
-        <img src="{{ item.image.url }}" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-xl" alt="">
+        {% if item.image %}
+            <img src="{{ item.image.url }}" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-xl" alt="{{ item.name }}">
+        {% else %}
+            <img src="/path/to/default/image.jpg" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-xl" alt="Default image">
+        {% endif %}
     </div>
 
     <div class="col-span-3 p-6 bg-gray-100 rounded-xl">
-        <h1 class="mb-6 tet-3xl">{{ item.name }}</h1>
-        <p class="text-gray-500"> <strong>Price : </strong> {{ item.price }} </p>
-        <p class="text-gray-500"> <strong>Seller : </strong> {{ item.created_by.username }} </p>
-        
+        <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
+        <p class="text-gray-500"><strong>Price: </strong>{{ item.price }}</p>
+        <p class="text-gray-500"><strong>Seller: </strong>{{ item.created_by.username }}</p>
+
         {% if item.description %}
             <p class="text-gray-700">
-                <strong class="text-gray-500">Description : </strong>{{ item.description }}<br>
+                <strong class="text-gray-500">Description: </strong>{{ item.description }}<br>
             </p>
         {% endif %}
 
-        <a href="#" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 ransition duration-300">Contact Seller</a>
+        <a href="#" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 transition duration-300">Contact Seller</a>
     </div>
-
 </div>
 
 <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
     <h2 class="mb-12 text-2xl text-center">Related Items</h2>
     <div class="grid grid-cols-3 gap-3">
-        {% for item in related_items %}
+        {% for related_item in related_items %}
             <div>
-                <a href="{% url 'item:detail' item.id %}">
-                    <div style="width: 100%; height: auto;"> 
-                        <img src="{{ item.image.url }}" class="rounded-t-xl" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                <a href="{% url 'item:detail' related_item.id %}">
+                    <div style="width: 100%; height: auto;">
+                        {% if related_item.image %}
+                            <img src="{{ related_item.image.url }}" class="rounded-t-xl" alt="{{ related_item.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <img src="/path/to/default/image.jpg" class="rounded-t-xl" alt="Default image" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% endif %}
                     </div>
                     <div class="p-6 bg-white rounded-b-xl">
-                        <h2 class="text-2xl">{{ item.title }}</h2>
-                        <p class="text-gray-500">Price: {{ item.price }}</p>
+                        <h2 class="text-2xl">{{ related_item.title }}</h2>
+                        <p class="text-gray-500">Price: {{ related_item.price }}</p>
                     </div>
                 </a>
             </div>
         {% endfor %}
     </div>
 </div>
-
 {% endblock content %}
